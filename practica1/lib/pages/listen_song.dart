@@ -1,7 +1,4 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
-import 'package:avatar_glow/avatar_glow.dart';
 
 class ListenSong extends StatelessWidget {
   const ListenSong({
@@ -48,10 +45,32 @@ class ListenSong extends StatelessWidget {
                 children: [
                   Text("Abrir con:", style: TextStyle(fontSize: 12)),
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       IconButton(
-                          onPressed: () {},
-                          icon: Image.asset('assets/spotify.png'))
+                        onPressed: () {},
+                        icon: Image.asset(
+                          'assets/spotify.png',
+                          color: Colors.white,
+                        ),
+                        iconSize: 60,
+                      ),
+                      IconButton(
+                        onPressed: () {},
+                        icon: Image.asset(
+                          'assets/others.png',
+                          color: Colors.white,
+                        ),
+                        iconSize: 50,
+                      ),
+                      IconButton(
+                        onPressed: () {},
+                        icon: Image.asset(
+                          'assets/apple.png',
+                          color: Colors.white,
+                        ),
+                        iconSize: 50,
+                      )
                     ],
                   )
                 ],

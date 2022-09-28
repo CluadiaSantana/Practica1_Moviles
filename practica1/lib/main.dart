@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:music_prac/pages/home_page.dart';
-import 'package:music_prac/pages/listen_song.dart';
+import 'package:practica1/pages/home_page.dart';
+import 'package:practica1/pages/listen_song.dart';
 
 void main() => runApp(const MyApp());
 
