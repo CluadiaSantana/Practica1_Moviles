@@ -8,3 +8,5 @@ abstract class SongEvent extends Equatable {
 }
 
 class SongRecordEvent extends SongEvent {}
+
+class SongSearchEvent extends SongEvent {}

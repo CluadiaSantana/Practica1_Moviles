@@ -17,13 +17,14 @@ class HomePage extends StatelessWidget {
         children: [
           Padding(
             padding: const EdgeInsets.only(top: 80, bottom: 50),
-            child: _listen(),
+            child: Text(
+              "Toque para escuchar",
+              style: TextStyle(fontSize: 20),
+            ),
           ),
           _recordButtom(),
           MaterialButton(
-            onPressed: () {
-              BlocProvider.of<SongBloc>(context).add(SongSearchEvent());
-            },
+            onPressed: () {},
             color: Colors.white,
             child: Icon(
               Icons.favorite_sharp,
@@ -36,35 +37,45 @@ class HomePage extends StatelessWidget {
     ));
   }
 
-  BlocBuilder<dynamic, dynamic> _listen() {
-    return BlocBuilder<SongBloc, SongState>(
+  BlocConsumer<SongBloc, SongState> _recordButtom() {
+    return BlocConsumer<SongBloc, SongState>(
+      listener: (context, state) {
+        // TODO: implement listener
+      },
       builder: (context, state) {
         if (state is SongRecordingState) {
-          return Text(
-            "Escuchando ...",
-            style: TextStyle(fontSize: 20),
+          return AvatarGlow(
+            glowColor: Colors.red,
+            endRadius: 150.0,
+            animate: true,
+            duration: Duration(milliseconds: 2000),
+            repeat: true,
+            showTwoGlows: true,
+            repeatPauseDuration: Duration(milliseconds: 10),
+            child: Material(
+              // Replace this child with your own
+              elevation: 1.0,
+              shape: CircleBorder(),
+              child: CircleAvatar(
+                backgroundColor: Colors.grey[100],
+                child: IconButton(
+                  icon: Image.asset(
+                    'assets/music.png',
+                  ),
+                  iconSize: 150,
+                  onPressed: () {
+                    BlocProvider.of<SongBloc>(context).add(SongRecordEvent());
+                  },
+                ),
+                radius: 90.0,
+              ),
+            ),
           );
         }
-        return Text(
-          "Toque para escuchar",
-          style: TextStyle(fontSize: 20),
-        );
-      },
-    );
-  }
-}
-
-BlocConsumer<SongBloc, SongState> _recordButtom() {
-  return BlocConsumer<SongBloc, SongState>(
-    listener: (context, state) {
-      // TODO: implement listener
-    },
-    builder: (context, state) {
-      if (state is SongRecordingState) {
         return AvatarGlow(
           glowColor: Colors.red,
           endRadius: 150.0,
-          animate: true,
+          animate: false,
           duration: Duration(milliseconds: 2000),
           repeat: true,
           showTwoGlows: true,
@@ -88,34 +99,7 @@ BlocConsumer<SongBloc, SongState> _recordButtom() {
             ),
           ),
         );
-      }
-      return AvatarGlow(
-        glowColor: Colors.red,
-        endRadius: 150.0,
-        animate: false,
-        duration: Duration(milliseconds: 20),
-        repeat: true,
-        showTwoGlows: true,
-        repeatPauseDuration: Duration(milliseconds: 5),
-        child: Material(
-          // Replace this child with your own
-          elevation: 1.0,
-          shape: CircleBorder(),
-          child: CircleAvatar(
-            backgroundColor: Colors.grey[100],
-            child: IconButton(
-              icon: Image.asset(
-                'assets/music.png',
-              ),
-              iconSize: 150,
-              onPressed: () {
-                BlocProvider.of<SongBloc>(context).add(SongRecordEvent());
-              },
-            ),
-            radius: 90.0,
-          ),
-        ),
-      );
-    },
-  );
+      },
+    );
+  }
 }

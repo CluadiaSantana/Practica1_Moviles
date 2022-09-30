@@ -9,10 +9,6 @@ abstract class SongState extends Equatable {
 
 class SongInitial extends SongState {}
 
-class SongRecordingState extends SongState {
-  bool _animated = false;
+class SongRecordingState extends SongState {}
 
-  SongRecordingState(this._animated);
-  @override
-  List<Object> get props => [_animated];
-}
+class SongSearchState extends SongState {}
