@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:avatar_glow/avatar_glow.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:practica1/pages/bloc/song_bloc.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({
@@ -27,7 +29,7 @@ class HomePage extends StatelessWidget {
             duration: Duration(milliseconds: 2000),
             repeat: true,
             showTwoGlows: true,
-            repeatPauseDuration: Duration(milliseconds: 100),
+            repeatPauseDuration: Duration(milliseconds: 10),
             child: Material(
               // Replace this child with your own
               elevation: 1.0,
@@ -39,7 +41,9 @@ class HomePage extends StatelessWidget {
                     'assets/music.png',
                   ),
                   iconSize: 150,
-                  onPressed: () {},
+                  onPressed: () {
+                    BlocProvider.of<SongBloc>(context).add(SongRecordEvent());
+                  },
                 ),
                 radius: 90.0,
               ),
