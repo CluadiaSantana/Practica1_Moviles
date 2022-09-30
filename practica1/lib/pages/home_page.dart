@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:avatar_glow/avatar_glow.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:practica1/pages/bloc/song_bloc.dart';
+import 'package:practica1/pages/listen_song.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({
@@ -52,23 +53,54 @@ class HomePage extends StatelessWidget {
       },
     );
   }
-}
 
-BlocConsumer<SongBloc, SongState> _recordButtom() {
-  return BlocConsumer<SongBloc, SongState>(
-    listener: (context, state) {
-      // TODO: implement listener
-    },
-    builder: (context, state) {
-      if (state is SongRecordingState) {
+  BlocConsumer<SongBloc, SongState> _recordButtom() {
+    return BlocConsumer<SongBloc, SongState>(
+      listener: (context, state) {
+        // TODO: implement listener
+        if (state is SongSearchState) {
+          Navigator.of(context)
+              .push(MaterialPageRoute(builder: (context) => ListenSong()));
+        }
+      },
+      builder: (context, state) {
+        if (state is SongRecordingState) {
+          return AvatarGlow(
+            glowColor: Colors.red,
+            endRadius: 150.0,
+            animate: true,
+            duration: Duration(milliseconds: 20000),
+            repeat: true,
+            showTwoGlows: true,
+            repeatPauseDuration: Duration(milliseconds: 500),
+            child: Material(
+              // Replace this child with your own
+              elevation: 1.0,
+              shape: CircleBorder(),
+              child: CircleAvatar(
+                backgroundColor: Colors.grey[100],
+                child: IconButton(
+                  icon: Image.asset(
+                    'assets/music.png',
+                  ),
+                  iconSize: 150,
+                  onPressed: () {
+                    BlocProvider.of<SongBloc>(context).add(SongRecordEvent());
+                  },
+                ),
+                radius: 90.0,
+              ),
+            ),
+          );
+        }
         return AvatarGlow(
           glowColor: Colors.red,
           endRadius: 150.0,
-          animate: true,
+          animate: false,
           duration: Duration(milliseconds: 2000),
           repeat: true,
           showTwoGlows: true,
-          repeatPauseDuration: Duration(milliseconds: 10),
+          repeatPauseDuration: Duration(milliseconds: 500),
           child: Material(
             // Replace this child with your own
             elevation: 1.0,
@@ -88,34 +120,7 @@ BlocConsumer<SongBloc, SongState> _recordButtom() {
             ),
           ),
         );
-      }
-      return AvatarGlow(
-        glowColor: Colors.red,
-        endRadius: 150.0,
-        animate: false,
-        duration: Duration(milliseconds: 20),
-        repeat: true,
-        showTwoGlows: true,
-        repeatPauseDuration: Duration(milliseconds: 5),
-        child: Material(
-          // Replace this child with your own
-          elevation: 1.0,
-          shape: CircleBorder(),
-          child: CircleAvatar(
-            backgroundColor: Colors.grey[100],
-            child: IconButton(
-              icon: Image.asset(
-                'assets/music.png',
-              ),
-              iconSize: 150,
-              onPressed: () {
-                BlocProvider.of<SongBloc>(context).add(SongRecordEvent());
-              },
-            ),
-            radius: 90.0,
-          ),
-        ),
-      );
-    },
-  );
+      },
+    );
+  }
 }
