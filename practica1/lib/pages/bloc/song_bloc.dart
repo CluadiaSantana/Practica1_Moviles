@@ -5,7 +5,7 @@ import 'dart:convert';
 import 'package:record/record.dart';
 import 'dart:io';
 import 'package:http/http.dart' as http;
-import 'package:practica1/secrets.dart';
+import 'package:practica1/pages/Repository/repo_http.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 part 'song_event.dart';
@@ -13,6 +13,7 @@ part 'song_state.dart';
 
 class SongBloc extends Bloc<SongEvent, SongState> {
   final record = Record();
+  final ht = httpReq();
   List<List<String>> favorites = new List.empty(growable: true);
   SongBloc() : super(SongInitial()) {
     on<SongRecordEvent>(_onRecord);
@@ -36,7 +37,7 @@ class SongBloc extends Bloc<SongEvent, SongState> {
         var songRecord = await record.stop();
         if (songRecord != null) {
           emit(SongSearchState());
-          List<String> infoSong = await _listen(songRecord);
+          List<String> infoSong = await ht.listen(songRecord);
           if (infoSong.length > 1) {
             emit(SongSearchSuccessState(songInfo: infoSong));
           } else {
@@ -47,42 +48,6 @@ class SongBloc extends Bloc<SongEvent, SongState> {
     } catch (error) {
       emit(SongErrorState());
       throw Error();
-    }
-  }
-
-  FutureOr<List<String>> _listen(String songRecord) async {
-    var url = Uri.parse('https://api.audd.io/');
-    print(songRecord);
-    File file = new File(songRecord);
-    String filebase = base64Encode(file.readAsBytesSync());
-    print(filebase);
-    try {
-      var response = await http.post(url, body: {
-        'api_token': API_TOKEN,
-        'audio': filebase,
-        'return': 'apple_music,spotify'
-      });
-      print(response.body);
-      final result = jsonDecode(response.body)['result'];
-      if (result == null) {
-        List<String> infoSong = ['null'];
-        return infoSong;
-      } else {
-        List<String> infoSong = [
-          result?['album'],
-          result?['title'],
-          result?['artist'],
-          result?['release_date'],
-          result?['spotify']['album']['images'][1]['url'],
-          result?["apple_music"]["url"],
-          result?["spotify"]["external_urls"]["spotify"],
-          result?["song_link"]
-        ];
-        return infoSong;
-      }
-    } catch (e) {
-      List<String> infoSong = ['null'];
-      return infoSong;
     }
   }
 

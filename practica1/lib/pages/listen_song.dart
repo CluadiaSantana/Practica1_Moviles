@@ -60,6 +60,10 @@ class ListenSong extends StatelessWidget {
     return BlocConsumer<SongBloc, SongState>(
       listener: (context, state) {
         // TODO: implement listener
+        if (state is SongFavoriteRequestState) {
+          ScaffoldMessenger.of(context)
+              .showSnackBar(SnackBar(content: Text('Procesando...')));
+        }
       },
       builder: (context, state) {
         if (state is SongSearchSuccessState) {
