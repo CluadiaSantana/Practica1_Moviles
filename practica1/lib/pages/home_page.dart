@@ -3,6 +3,7 @@ import 'package:avatar_glow/avatar_glow.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:practica1/pages/bloc/song_bloc.dart';
 import 'package:practica1/pages/listen_song.dart';
+import 'package:practica1/pages/favorites.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({
@@ -23,7 +24,7 @@ class HomePage extends StatelessWidget {
           _recordButtom(),
           MaterialButton(
             onPressed: () {
-              BlocProvider.of<SongBloc>(context).add(SongSearchEvent());
+              BlocProvider.of<SongBloc>(context).add(SongVFavoritesEvent());
             },
             color: Colors.white,
             child: Icon(
@@ -61,6 +62,9 @@ class HomePage extends StatelessWidget {
         if (state is SongSearchState) {
           Navigator.of(context)
               .push(MaterialPageRoute(builder: (context) => ListenSong()));
+        } else if (state is SongVFavoritesState) {
+          Navigator.of(context)
+              .push(MaterialPageRoute(builder: (context) => Favorites()));
         }
       },
       builder: (context, state) {

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:practica1/pages/bloc/song_bloc.dart';
 
 class ListenSong extends StatelessWidget {
   const ListenSong({
@@ -7,17 +9,64 @@ class ListenSong extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          leading: IconButton(onPressed: (() {}), icon: Icon(Icons.arrow_back)),
-          title: const Text('Here you go'),
-          actions: [IconButton(onPressed: () {}, icon: Icon(Icons.favorite))],
-        ),
-        body: Center(
-          child: Column(
+    return _Navegation();
+  }
+
+  BlocConsumer<SongBloc, SongState> _Navegation() {
+    return BlocConsumer<SongBloc, SongState>(
+      listener: (context, state) {
+        // TODO: implement listener
+      },
+      builder: (context, state) {
+        if (state is SongSearchSuccessState) {
+          return Scaffold(
+              appBar: AppBar(
+                leading: IconButton(
+                    onPressed: (() {
+                      Navigator.of(context).pop();
+                    }),
+                    icon: Icon(Icons.arrow_back)),
+                title: const Text('Here you go'),
+                actions: [
+                  IconButton(
+                      onPressed: () {
+                        BlocProvider.of<SongBloc>(context).add(
+                            SongFavoriteRequestEvent(songInfo: state.songInfo));
+                      },
+                      icon: Icon(Icons.favorite))
+                ],
+              ),
+              body: Center(
+                child: _loadPage(),
+              ));
+        }
+        return Scaffold(
+            appBar: AppBar(
+              leading: IconButton(
+                  onPressed: (() {
+                    Navigator.of(context).pop();
+                  }),
+                  icon: Icon(Icons.arrow_back)),
+              title: const Text('Here you go'),
+            ),
+            body: Center(
+              child: _loadPage(),
+            ));
+      },
+    );
+  }
+
+  BlocConsumer<SongBloc, SongState> _loadPage() {
+    return BlocConsumer<SongBloc, SongState>(
+      listener: (context, state) {
+        // TODO: implement listener
+      },
+      builder: (context, state) {
+        if (state is SongSearchSuccessState) {
+          return Column(
             children: [
               Image.network(
-                'https://i.scdn.co/image/d3acaeb069f37d8e257221f7224c813c5fa6024e',
+                state.songInfo[4],
                 width: double.infinity,
                 fit: BoxFit.fitHeight,
               ),
@@ -27,17 +76,18 @@ class ListenSong extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Text(
-                      "Infinity",
+                      "${state.songInfo[0]}",
+                      textAlign: TextAlign.center,
                       style:
                           TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
                     ),
                     Text(
-                      "Feel Something",
+                      "${state.songInfo[1]}",
                       style:
                           TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                     ),
-                    Text("Jaymes Young"),
-                    Text("2017-06-23"),
+                    Text("${state.songInfo[2]}"),
+                    Text("${state.songInfo[3]}"),
                   ],
                 ),
               ),
@@ -76,7 +126,12 @@ class ListenSong extends StatelessWidget {
                 ],
               )
             ],
-          ),
-        ));
+          );
+        } else if (state is SongSearchState) {
+          return Text("Esperando respuesta.....");
+        }
+        return Text("Cancion no encontrada");
+      },
+    );
   }
 }

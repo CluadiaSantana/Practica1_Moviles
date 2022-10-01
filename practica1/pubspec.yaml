@@ -34,8 +34,10 @@ dependencies:
   avatar_glow: ^2.0.2
   http: ^0.13.5
   equatable: ^2.0.5
-  record: ^4.4.0
+  record: 
   flutter_bloc: 
+  permission_handler:
+  path_provider:
 
 
   # The following adds the Cupertino Icons font to your application.
