@@ -69,62 +69,32 @@ class HomePage extends StatelessWidget {
       },
       builder: (context, state) {
         if (state is SongRecordingState) {
-          return AvatarGlow(
-            glowColor: Colors.red,
-            endRadius: 150.0,
-            animate: true,
-            duration: Duration(milliseconds: 20000),
-            repeat: true,
-            showTwoGlows: true,
-            repeatPauseDuration: Duration(milliseconds: 500),
-            child: Material(
-              // Replace this child with your own
-              elevation: 1.0,
-              shape: CircleBorder(),
-              child: CircleAvatar(
-                backgroundColor: Colors.grey[100],
-                child: IconButton(
-                  icon: Image.asset(
-                    'assets/music.png',
-                  ),
-                  iconSize: 150,
-                  onPressed: () {
-                    BlocProvider.of<SongBloc>(context).add(SongRecordEvent());
-                  },
-                ),
-                radius: 90.0,
-              ),
-            ),
-          );
+          return _avatarGlow(context, true);
         }
-        return AvatarGlow(
-          glowColor: Colors.red,
-          endRadius: 150.0,
-          animate: false,
-          duration: Duration(milliseconds: 2000),
-          repeat: true,
-          showTwoGlows: true,
-          repeatPauseDuration: Duration(milliseconds: 500),
-          child: Material(
-            // Replace this child with your own
-            elevation: 1.0,
-            shape: CircleBorder(),
-            child: CircleAvatar(
-              backgroundColor: Colors.grey[100],
-              child: IconButton(
-                icon: Image.asset(
-                  'assets/music.png',
-                ),
-                iconSize: 150,
-                onPressed: () {
-                  BlocProvider.of<SongBloc>(context).add(SongRecordEvent());
-                },
-              ),
-              radius: 90.0,
-            ),
-          ),
-        );
+        return _avatarGlow(context, false);
       },
     );
+  }
+
+  AvatarGlow _avatarGlow(BuildContext context, bool anima) {
+    return AvatarGlow(
+        animate: anima,
+        glowColor: Colors.red,
+        child: Material(
+          shape: CircleBorder(),
+          elevation: 1,
+          child: CircleAvatar(
+            backgroundColor: Colors.grey[100],
+            child: IconButton(
+              onPressed: () {
+                BlocProvider.of<SongBloc>(context).add(SongRecordEvent());
+              },
+              icon: Image.asset('assets/music.png'),
+              iconSize: 150,
+            ),
+            radius: 90,
+          ),
+        ),
+        endRadius: 150);
   }
 }

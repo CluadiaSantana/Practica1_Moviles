@@ -10,6 +10,8 @@
 .svn/
 migrate_working_dir/
 
+practica1/lib/secrets.dart
+
 # IntelliJ related
 *.iml
 *.ipr
@@ -31,6 +33,7 @@ migrate_working_dir/
 .pub-cache/
 .pub/
 /build/
+/lib/secrets.dart
 
 # Symbolication related
 app.*.symbols

@@ -63,13 +63,15 @@ class SongBloc extends Bloc<SongEvent, SongState> {
       List<String> currentSong = event.songInfo;
       if (favorites.indexOf(currentSong) < 0) {
         favorites.add(currentSong);
-        print('añadido');
+        print('se añadio');
+        emit(SongFavoriteSuccessState());
+      } else {
+        emit(SongFavoriteFailState());
       }
       for (int i = 0; i < favorites.length; i++) {
         print(favorites[i][0]);
       }
     }
-
     emit(SongSearchSuccessState(songInfo: event.songInfo));
   }
 
