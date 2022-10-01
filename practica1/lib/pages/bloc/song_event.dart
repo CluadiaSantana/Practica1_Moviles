@@ -16,6 +16,15 @@ class SongSearchSuccessEvent extends SongEvent {}
 
 class SongVFavoritesEvent extends SongEvent {}
 
+class SongLauncherEvent extends SongEvent {
+  final String url;
+
+  SongLauncherEvent({required this.url});
+
+  @override
+  List<Object> get props => [url];
+}
+
 class SongFavoriteRequestEvent extends SongEvent {
   final List<String> songInfo;
 

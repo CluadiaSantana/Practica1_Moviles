@@ -98,7 +98,10 @@ class ListenSong extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       IconButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          BlocProvider.of<SongBloc>(context)
+                              .add(SongLauncherEvent(url: state.songInfo[6]));
+                        },
                         icon: Image.asset(
                           'assets/spotify.png',
                           color: Colors.white,
@@ -106,7 +109,10 @@ class ListenSong extends StatelessWidget {
                         iconSize: 60,
                       ),
                       IconButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          BlocProvider.of<SongBloc>(context)
+                              .add(SongLauncherEvent(url: state.songInfo[7]));
+                        },
                         icon: Image.asset(
                           'assets/others.png',
                           color: Colors.white,
@@ -114,7 +120,10 @@ class ListenSong extends StatelessWidget {
                         iconSize: 50,
                       ),
                       IconButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          BlocProvider.of<SongBloc>(context)
+                              .add(SongLauncherEvent(url: state.songInfo[5]));
+                        },
                         icon: Image.asset(
                           'assets/apple.png',
                           color: Colors.white,

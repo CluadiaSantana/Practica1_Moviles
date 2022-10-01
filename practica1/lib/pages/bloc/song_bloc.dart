@@ -5,8 +5,8 @@ import 'dart:convert';
 import 'package:record/record.dart';
 import 'dart:io';
 import 'package:http/http.dart' as http;
-import 'package:path_provider/path_provider.dart';
-import 'package:permission_handler/permission_handler.dart';
+import 'package:practica1/secrets.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 part 'song_event.dart';
 part 'song_state.dart';
@@ -18,6 +18,7 @@ class SongBloc extends Bloc<SongEvent, SongState> {
     on<SongRecordEvent>(_onRecord);
     on<SongVFavoritesEvent>(_viewFavorite);
     on<SongFavoriteRequestEvent>(_requestFavorite);
+    on<SongLauncherEvent>(_goOut);
   }
 
   FutureOr<void> _onRecord(SongEvent event, Emitter emit) async {
@@ -26,8 +27,12 @@ class SongBloc extends Bloc<SongEvent, SongState> {
     try {
       bool per = await record.hasPermission();
       if (per) {
-        await record.start();
-        await Future.delayed(Duration(seconds: 4));
+        await record.start(
+            encoder: AudioEncoder.aacLc, // by default
+            bitRate: 128000,
+            samplingRate: 44100 // by default
+            );
+        await Future.delayed(Duration(seconds: 5));
         var songRecord = await record.stop();
         if (songRecord != null) {
           emit(SongSearchState());
@@ -50,9 +55,10 @@ class SongBloc extends Bloc<SongEvent, SongState> {
     print(songRecord);
     File file = new File(songRecord);
     String filebase = base64Encode(file.readAsBytesSync());
+    print(filebase);
     try {
       var response = await http.post(url, body: {
-        'api_token': '',
+        'api_token': API_TOKEN,
         'audio': filebase,
         'return': 'apple_music,spotify'
       });
@@ -63,19 +69,20 @@ class SongBloc extends Bloc<SongEvent, SongState> {
         return infoSong;
       } else {
         List<String> infoSong = [
-          result['album'],
-          result['title'],
-          result['artist'],
-          result['release_date'],
-          result['spotify']['album']['images'][1]['url'],
-          result["apple_music"]["url"],
-          result["spotify"]["external_urls"]["spotify"],
-          result["song_link"]
+          result?['album'],
+          result?['title'],
+          result?['artist'],
+          result?['release_date'],
+          result?['spotify']['album']['images'][1]['url'],
+          result?["apple_music"]["url"],
+          result?["spotify"]["external_urls"]["spotify"],
+          result?["song_link"]
         ];
         return infoSong;
       }
     } catch (e) {
-      throw Error();
+      List<String> infoSong = ['null'];
+      return infoSong;
     }
   }
 
@@ -86,12 +93,29 @@ class SongBloc extends Bloc<SongEvent, SongState> {
 
   FutureOr<void> _requestFavorite(
       SongFavoriteRequestEvent event, Emitter<SongState> emit) {
+    emit(SongFavoriteRequestState());
     if (event.songInfo != null) {
       List<String> currentSong = event.songInfo;
-      favorites.add(currentSong);
-      print(favorites.length);
+      if (favorites.indexOf(currentSong) < 0) {
+        favorites.add(currentSong);
+        print('añadido');
+      }
+      for (int i = 0; i < favorites.length; i++) {
+        print(favorites[i][0]);
+      }
     }
 
-    emit(SongVFavoritesState());
+    emit(SongSearchSuccessState(songInfo: event.songInfo));
+  }
+
+  FutureOr<void> _goOut(
+      SongLauncherEvent event, Emitter<SongState> emit) async {
+    Uri url = Uri.parse(event.url);
+    if (!await launchUrl(
+      url,
+      mode: LaunchMode.externalApplication,
+    )) {
+      throw 'Could not launch $url';
+    }
   }
 }

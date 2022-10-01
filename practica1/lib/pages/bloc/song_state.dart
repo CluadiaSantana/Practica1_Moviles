@@ -21,14 +21,7 @@ class SongVFavoritesState extends SongState {}
 
 class SongFavoriteSuccessState extends SongState {}
 
-class SongFavoriteRequestState extends SongState {
-  final List<String> songInfo;
-
-  SongFavoriteRequestState({required this.songInfo});
-
-  @override
-  List<Object> get props => [songInfo];
-}
+class SongFavoriteRequestState extends SongState {}
 
 class SongFavoriteFailState extends SongState {}
 
