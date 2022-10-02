@@ -21,16 +21,6 @@ class ItemFavorites extends StatelessWidget {
               fit: BoxFit.fill,
             )),
             Positioned(
-                child: MaterialButton(
-              onPressed: () {
-                _redirigir(context);
-                ;
-              },
-              child: Ink(
-                width: double.infinity,
-              ),
-            )),
-            Positioned(
               left: 0,
               right: 0,
               bottom: 0,
@@ -52,9 +42,22 @@ class ItemFavorites extends StatelessWidget {
               ),
             ),
             Positioned(
+                left: 0,
+                right: 0,
+                top: 0,
+                bottom: 0,
+                child: IconButton(
+                  onPressed: () {},
+                  icon: Icon(
+                    Icons.square,
+                    color: Color.fromARGB(0, 255, 82, 82),
+                  ),
+                )),
+            Positioned(
                 child: IconButton(
               onPressed: () {
-                BlocProvider.of<SongBloc>(context).add(SongVFavoritesEvent());
+                _showdialog(context, 'Eliminar de favoritos',
+                    'El elemento será eliminado de tus favoritos \n ¿Quieres continuar?');
               },
               icon: Icon(
                 Icons.favorite_sharp,
@@ -67,63 +70,47 @@ class ItemFavorites extends StatelessWidget {
     );
   }
 
-  AlertDialog _eliminarFavoritos(BuildContext context) {
-    return AlertDialog(
-      title: Text('Eliminar de favoritos'),
-      content: Text(
-        'El elemento será eliminado de tus favoritos \n ¿Quieres continuar?',
-        style: TextStyle(fontSize: 12),
-      ),
-      actions: [
-        TextButton(
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-          child: Text(
-            'CANCEL',
-            style: TextStyle(color: Theme.of(context).primaryColor),
-          ),
-        ),
-        TextButton(
-          onPressed: () {
-            Navigator.of(context).pop();
-            BlocProvider.of<SongBloc>(context)
-                .add(SongFavoriteRequestEvent(songInfo: content));
-          },
-          child: Text('ACCEPT',
-              style: TextStyle(color: Theme.of(context).primaryColor)),
-        ),
-      ],
-    );
+  Future<dynamic> _showdialog(
+      BuildContext context, String texto, String pregunta) {
+    return showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text(texto),
+            content: Text(
+              pregunta,
+              style: TextStyle(fontSize: 12),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: Text(
+                  'CANCEL',
+                  style: TextStyle(color: Theme.of(context).primaryColor),
+                ),
+              ),
+              _delete(context, texto),
+            ],
+          );
+        });
   }
 
-  AlertDialog _redirigir(BuildContext context) {
-    return AlertDialog(
-      title: Text('Abrir cncion'),
-      content: Text(
-        'Sera redirigido a las opciones para abrir la cancion \n ¿Quieres continuar?',
-        style: TextStyle(fontSize: 12),
-      ),
-      actions: [
-        TextButton(
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-          child: Text(
-            'CANCEL',
-            style: TextStyle(color: Theme.of(context).primaryColor),
-          ),
-        ),
-        TextButton(
-          onPressed: () {
-            Navigator.of(context).pop();
-            BlocProvider.of<SongBloc>(context)
-                .add(SongFavoriteRequestEvent(songInfo: content));
-          },
-          child: Text('ACCEPT',
-              style: TextStyle(color: Theme.of(context).primaryColor)),
-        ),
-      ],
+  TextButton _delete(BuildContext context, String text) {
+    return TextButton(
+      onPressed: () {
+        Navigator.of(context).pop();
+        if (text == 'Eliminar de favoritos') {
+          BlocProvider.of<SongBloc>(context)
+              .add(SongFavoriteDeleteRequestEvent(songInfo: content));
+        } else {
+          BlocProvider.of<SongBloc>(context)
+              .add(SongLauncherEvent(url: content[7]));
+        }
+      },
+      child: Text('ACCEPT',
+          style: TextStyle(color: Theme.of(context).primaryColor)),
     );
   }
 }

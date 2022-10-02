@@ -25,7 +25,6 @@ class httpReq {
         'audio': filebase,
         'return': 'apple_music,spotify'
       });
-      print(response.body);
       final result = jsonDecode(response.body)['result'];
       if (result == null) {
         List<String> infoSong = ['null'];

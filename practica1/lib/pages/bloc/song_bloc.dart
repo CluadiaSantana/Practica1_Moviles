@@ -11,12 +11,14 @@ part 'song_state.dart';
 class SongBloc extends Bloc<SongEvent, SongState> {
   final record = Record();
   final ht = httpReq();
-  List<List<String>> favorites = new List.empty(growable: true);
+  List<List<String>> favorites = [];
+  List<Cancion> favorC = [];
   SongBloc() : super(SongInitial()) {
     on<SongRecordEvent>(_onRecord);
     on<SongVFavoritesEvent>(_viewFavorite);
     on<SongFavoriteRequestEvent>(_requestFavorite);
     on<SongLauncherEvent>(_goOut);
+    on<SongFavoriteDeleteRequestEvent>(_delete);
   }
 
   FutureOr<void> _onRecord(SongEvent event, Emitter emit) async {
@@ -63,7 +65,18 @@ class SongBloc extends Bloc<SongEvent, SongState> {
     emit(SongFavoriteRequestState());
     if (event.songInfo != null) {
       List<String> currentSong = event.songInfo;
-      if (favorites.indexOf(currentSong) < 0) {
+      Cancion k = new Cancion(
+          currentSong[0],
+          currentSong[1],
+          currentSong[2],
+          currentSong[3],
+          currentSong[4],
+          currentSong[5],
+          currentSong[6],
+          currentSong[7]);
+      int p = favorC.indexWhere((element) => element.image == currentSong[4]);
+      if (p < 0) {
+        favorC.add(k);
         favorites.add(currentSong);
         emit(SongFavoriteSuccessState());
       } else {
@@ -76,11 +89,35 @@ class SongBloc extends Bloc<SongEvent, SongState> {
   FutureOr<void> _goOut(
       SongLauncherEvent event, Emitter<SongState> emit) async {
     Uri url = Uri.parse(event.url);
-    if (!await launchUrl(
+    await launchUrl(
       url,
       mode: LaunchMode.externalApplication,
-    )) {
-      throw 'Could not launch $url';
+    );
+  }
+
+  FutureOr<void> _delete(
+      SongFavoriteDeleteRequestEvent event, Emitter<SongState> emit) {
+    emit(SongFavoriteDeleteRequestState());
+    favorites.remove(event.songInfo);
+    emit(SongFavoriteDelSuccRequestState());
+    if (favorites.length > 0) {
+      emit(SongVFavoritesAreState(favorite: favorites));
+    } else {
+      emit(SongVFavoritesNullState());
     }
   }
+}
+
+class Cancion {
+  String album;
+  String title;
+  String artist;
+  String date;
+  String image;
+  String apple;
+  String spotify;
+  String ext;
+
+  Cancion(this.album, this.title, this.artist, this.date, this.image,
+      this.apple, this.spotify, this.ext);
 }
