@@ -21,6 +21,21 @@ class ItemFavorites extends StatelessWidget {
               fit: BoxFit.fill,
             )),
             Positioned(
+                left: 0,
+                right: 0,
+                top: 0,
+                bottom: 0,
+                child: IconButton(
+                  onPressed: () {
+                    _showdialog(context, 'Abrir cancion',
+                        'Sera redirigido a ver opciones para abir la cancion \n ¿Quieres continuar?');
+                  },
+                  icon: Icon(
+                    Icons.square,
+                    color: Colors.redAccent,
+                  ),
+                )),
+            Positioned(
               left: 0,
               right: 0,
               bottom: 0,
@@ -41,18 +56,6 @@ class ItemFavorites extends StatelessWidget {
                     )),
               ),
             ),
-            Positioned(
-                left: 0,
-                right: 0,
-                top: 0,
-                bottom: 0,
-                child: IconButton(
-                  onPressed: () {},
-                  icon: Icon(
-                    Icons.square,
-                    color: Color.fromARGB(0, 255, 82, 82),
-                  ),
-                )),
             Positioned(
                 child: IconButton(
               onPressed: () {
