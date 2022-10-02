@@ -27,48 +27,7 @@ class ListenSong extends StatelessWidget {
                     }),
                     icon: Icon(Icons.arrow_back)),
                 title: const Text('Here you go'),
-                actions: [
-                  IconButton(
-                      onPressed: () {
-                        showDialog(
-                            context: context,
-                            builder: (context) {
-                              return AlertDialog(
-                                title: Text('Agregar a favoritos'),
-                                content: Text(
-                                  'El elemento será gregado a tus favoritos \n ¿Quieres continuar?',
-                                  style: TextStyle(fontSize: 12),
-                                ),
-                                actions: [
-                                  TextButton(
-                                    onPressed: () {
-                                      Navigator.of(context).pop();
-                                    },
-                                    child: Text(
-                                      'CANCEL',
-                                      style: TextStyle(
-                                          color:
-                                              Theme.of(context).primaryColor),
-                                    ),
-                                  ),
-                                  TextButton(
-                                    onPressed: () {
-                                      Navigator.of(context).pop();
-                                      BlocProvider.of<SongBloc>(context).add(
-                                          SongFavoriteRequestEvent(
-                                              songInfo: state.songInfo));
-                                    },
-                                    child: Text('ACCEPT',
-                                        style: TextStyle(
-                                            color: Theme.of(context)
-                                                .primaryColor)),
-                                  ),
-                                ],
-                              );
-                            });
-                      },
-                      icon: Icon(Icons.favorite))
-                ],
+                actions: [_requestFavorite(context, state.songInfo)],
               ),
               body: Center(
                 child: _loadPage(),
@@ -88,6 +47,45 @@ class ListenSong extends StatelessWidget {
             ));
       },
     );
+  }
+
+  IconButton _requestFavorite(BuildContext context, List<String> data) {
+    return IconButton(
+        onPressed: () {
+          showDialog(
+              context: context,
+              builder: (context) {
+                return AlertDialog(
+                  title: Text('Agregar a favoritos'),
+                  content: Text(
+                    'El elemento será gregado a tus favoritos \n ¿Quieres continuar?',
+                    style: TextStyle(fontSize: 12),
+                  ),
+                  actions: [
+                    TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: Text(
+                        'CANCEL',
+                        style: TextStyle(color: Theme.of(context).primaryColor),
+                      ),
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                        BlocProvider.of<SongBloc>(context)
+                            .add(SongFavoriteRequestEvent(songInfo: data));
+                      },
+                      child: Text('ACCEPT',
+                          style:
+                              TextStyle(color: Theme.of(context).primaryColor)),
+                    ),
+                  ],
+                );
+              });
+        },
+        icon: Icon(Icons.favorite));
   }
 
   BlocConsumer<SongBloc, SongState> _loadPage() {
@@ -133,12 +131,12 @@ class ListenSong extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text(
-                "${data[0]}",
+                "${data[1]}",
                 textAlign: TextAlign.center,
                 style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
               ),
               Text(
-                "${data[1]}",
+                "${data[0]}",
                 style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
               ),
               Text("${data[2]}"),

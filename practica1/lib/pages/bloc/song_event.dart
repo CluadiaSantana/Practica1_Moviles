@@ -33,3 +33,14 @@ class SongFavoriteRequestEvent extends SongEvent {
   @override
   List<Object> get props => [songInfo];
 }
+
+class SongFavoriteDeleteRequestEvent extends SongEvent {
+  final List<String> songInfo;
+
+  SongFavoriteDeleteRequestEvent({required this.songInfo});
+
+  @override
+  List<Object> get props => [songInfo];
+}
+
+class SongFavoriteDelSuccRequestEvent extends SongEvent {}

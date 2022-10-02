@@ -1,10 +1,7 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'dart:convert';
 import 'package:record/record.dart';
-import 'dart:io';
-import 'package:http/http.dart' as http;
 import 'package:practica1/pages/Repository/repo_http.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -54,6 +51,11 @@ class SongBloc extends Bloc<SongEvent, SongState> {
   FutureOr<void> _viewFavorite(
       SongVFavoritesEvent event, Emitter<SongState> emit) {
     emit(SongVFavoritesState());
+    if (favorites.length > 0) {
+      emit(SongVFavoritesAreState(favorite: favorites));
+    } else {
+      emit(SongVFavoritesNullState());
+    }
   }
 
   FutureOr<void> _requestFavorite(
@@ -63,13 +65,9 @@ class SongBloc extends Bloc<SongEvent, SongState> {
       List<String> currentSong = event.songInfo;
       if (favorites.indexOf(currentSong) < 0) {
         favorites.add(currentSong);
-        print('se añadio');
         emit(SongFavoriteSuccessState());
       } else {
         emit(SongFavoriteFailState());
-      }
-      for (int i = 0; i < favorites.length; i++) {
-        print(favorites[i][0]);
       }
     }
     emit(SongSearchSuccessState(songInfo: event.songInfo));
