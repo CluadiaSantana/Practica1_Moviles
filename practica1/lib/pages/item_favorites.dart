@@ -32,7 +32,7 @@ class ItemFavorites extends StatelessWidget {
                   },
                   icon: Icon(
                     Icons.square,
-                    color: Colors.redAccent,
+                    color: Color.fromARGB(0, 255, 82, 82),
                   ),
                 )),
             Positioned(

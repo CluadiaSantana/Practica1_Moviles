@@ -98,7 +98,19 @@ class SongBloc extends Bloc<SongEvent, SongState> {
   FutureOr<void> _delete(
       SongFavoriteDeleteRequestEvent event, Emitter<SongState> emit) {
     emit(SongFavoriteDeleteRequestState());
+    List<String> currentSong = event.songInfo;
+    Cancion k = new Cancion(
+        currentSong[0],
+        currentSong[1],
+        currentSong[2],
+        currentSong[3],
+        currentSong[4],
+        currentSong[5],
+        currentSong[6],
+        currentSong[7]);
     favorites.remove(event.songInfo);
+    int p = favorC.indexWhere((element) => element.image == currentSong[4]);
+    favorC.removeAt(p);
     emit(SongFavoriteDelSuccRequestState());
     if (favorites.length > 0) {
       emit(SongVFavoritesAreState(favorite: favorites));
