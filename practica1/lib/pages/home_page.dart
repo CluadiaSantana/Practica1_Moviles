@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:practica1/pages/bloc/song_bloc.dart';
 import 'package:practica1/pages/listen_song.dart';
 import 'package:practica1/pages/favorites.dart';
+import 'package:practica1/pages/login/bloc/auth_bloc.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({
@@ -22,16 +23,32 @@ class HomePage extends StatelessWidget {
             child: _listen(),
           ),
           _recordButtom(),
-          MaterialButton(
-            onPressed: () {
-              BlocProvider.of<SongBloc>(context).add(SongVFavoritesEvent());
-            },
-            color: Colors.white,
-            child: Icon(
-              Icons.favorite_sharp,
-              color: Colors.black,
-            ),
-            shape: CircleBorder(),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              MaterialButton(
+                onPressed: () {
+                  BlocProvider.of<SongBloc>(context).add(SongVFavoritesEvent());
+                },
+                color: Colors.white,
+                child: Icon(
+                  Icons.favorite_sharp,
+                  color: Colors.black,
+                ),
+                shape: CircleBorder(),
+              ),
+              MaterialButton(
+                onPressed: () {
+                  BlocProvider.of<AuthBloc>(context).add(SignOutEvent());
+                },
+                color: Colors.white,
+                child: Icon(
+                  Icons.power_settings_new,
+                  color: Colors.black,
+                ),
+                shape: CircleBorder(),
+              ),
+            ],
           )
         ],
       ),

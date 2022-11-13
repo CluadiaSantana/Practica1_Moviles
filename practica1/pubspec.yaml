@@ -39,6 +39,15 @@ dependencies:
   permission_handler:
   path_provider:
   url_launcher:
+  auth_buttons:
+  firebase_core:
+  firebase_auth:
+  cloud_firestore:
+  google_sign_in:
+  flutterfire_ui:
+
+
+
  
 
 
@@ -75,3 +84,4 @@ flutter:
     - assets/spotify.png
     - assets/apple.png
     - assets/others.png
+    - assets/login.gif
