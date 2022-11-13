@@ -3,8 +3,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:practica1/pages/bloc/song_bloc.dart';
 
 class ItemFavorites extends StatelessWidget {
-  final List<String> content;
-  ItemFavorites({Key? key, required this.content}) : super(key: key);
+  final Map<String, dynamic> content;
+  final index;
+  ItemFavorites({Key? key, required this.content, this.index})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +19,7 @@ class ItemFavorites extends StatelessWidget {
           children: [
             Positioned.fill(
                 child: Image.network(
-              content[4],
+              content['image'],
               fit: BoxFit.fill,
             )),
             Positioned(
@@ -48,10 +50,10 @@ class ItemFavorites extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          content[1],
+                          content['title'],
                           style: TextStyle(fontSize: 20),
                         ),
-                        Text(content[0])
+                        Text(content['album'])
                       ],
                     )),
               ),
@@ -106,10 +108,10 @@ class ItemFavorites extends StatelessWidget {
         Navigator.of(context).pop();
         if (text == 'Eliminar de favoritos') {
           BlocProvider.of<SongBloc>(context)
-              .add(SongFavoriteDeleteRequestEvent(songInfo: content));
+              .add(SongFavoriteDeleteRequestEvent(songIndex: index));
         } else {
           BlocProvider.of<SongBloc>(context)
-              .add(SongLauncherEvent(url: content[7]));
+              .add(SongLauncherEvent(url: content['ext']));
         }
       },
       child: Text('ACCEPT',

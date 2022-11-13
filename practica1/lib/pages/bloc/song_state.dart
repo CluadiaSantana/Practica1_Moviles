@@ -22,7 +22,7 @@ class SongVFavoritesState extends SongState {}
 class SongVFavoritesNullState extends SongState {}
 
 class SongVFavoritesAreState extends SongState {
-  final List<List<String>> favorite;
+  final List<dynamic> favorite;
 
   SongVFavoritesAreState({required this.favorite});
 
@@ -43,7 +43,7 @@ class SongFavoriteDelSuccRequestState extends SongState {}
 class SongFavoriteFailState extends SongState {}
 
 class SongSearchSuccessState extends SongState {
-  final List<String> songInfo;
+  final Map<String, dynamic> songInfo;
 
   SongSearchSuccessState({required this.songInfo});
 

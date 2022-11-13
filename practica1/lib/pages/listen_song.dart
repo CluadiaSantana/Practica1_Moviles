@@ -49,7 +49,7 @@ class ListenSong extends StatelessWidget {
     );
   }
 
-  IconButton _requestFavorite(BuildContext context, List<String> data) {
+  IconButton _requestFavorite(BuildContext context, Map<String, dynamic> data) {
     return IconButton(
         onPressed: () {
           showDialog(
@@ -117,11 +117,11 @@ class ListenSong extends StatelessWidget {
     );
   }
 
-  Column _dataSong(List<String> data, context) {
+  Column _dataSong(Map<String, dynamic> data, context) {
     return Column(
       children: [
         Image.network(
-          data[4],
+          data['image'],
           width: double.infinity,
           fit: BoxFit.fitHeight,
         ),
@@ -131,16 +131,16 @@ class ListenSong extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text(
-                "${data[1]}",
+                "${data['title']}",
                 textAlign: TextAlign.center,
                 style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
               ),
               Text(
-                "${data[0]}",
+                "${data['album']}",
                 style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
               ),
-              Text("${data[2]}"),
-              Text("${data[3]}"),
+              Text("${data['artist']}"),
+              Text("${data['release_date']}"),
             ],
           ),
         ),
@@ -150,9 +150,9 @@ class ListenSong extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                _buttomUrl(context, data[6], 'assets/spotify.png'),
-                _buttomUrl(context, data[7], 'assets/others.png'),
-                _buttomUrl(context, data[5], 'assets/apple.png')
+                _buttomUrl(context, data['spotify'], 'assets/spotify.png'),
+                _buttomUrl(context, data['ext'], 'assets/others.png'),
+                _buttomUrl(context, data['apple'], 'assets/apple.png')
               ],
             )
           ],

@@ -38,7 +38,10 @@ class Favorites extends StatelessWidget {
         return ListView.builder(
           itemCount: state.favorite.length,
           itemBuilder: (BuildContext context, int index) {
-            return ItemFavorites(content: state.favorite[index]);
+            return ItemFavorites(
+              content: state.favorite[index],
+              index: index,
+            );
           },
         );
       }

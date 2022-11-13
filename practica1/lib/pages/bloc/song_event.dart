@@ -26,7 +26,7 @@ class SongLauncherEvent extends SongEvent {
 }
 
 class SongFavoriteRequestEvent extends SongEvent {
-  final List<String> songInfo;
+  final Map<String, dynamic> songInfo;
 
   SongFavoriteRequestEvent({required this.songInfo});
 
@@ -35,12 +35,12 @@ class SongFavoriteRequestEvent extends SongEvent {
 }
 
 class SongFavoriteDeleteRequestEvent extends SongEvent {
-  final List<String> songInfo;
+  final int songIndex;
 
-  SongFavoriteDeleteRequestEvent({required this.songInfo});
+  SongFavoriteDeleteRequestEvent({required this.songIndex});
 
   @override
-  List<Object> get props => [songInfo];
+  List<Object> get props => [songIndex];
 }
 
 class SongFavoriteDelSuccRequestEvent extends SongEvent {}

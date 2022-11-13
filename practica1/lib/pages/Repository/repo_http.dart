@@ -26,24 +26,25 @@ class httpReq {
         'return': 'apple_music,spotify'
       });
       final result = jsonDecode(response.body)['result'];
+      print(result);
       if (result == null) {
-        List<String> infoSong = ['null'];
+        Map<String, dynamic> infoSong = {};
         return infoSong;
       } else {
-        List<String> infoSong = [
-          result?['album'],
-          result?['title'],
-          result?['artist'],
-          result?['release_date'],
-          result?['spotify']['album']['images'][1]['url'],
-          result?["apple_music"]["url"],
-          result?["spotify"]["external_urls"]["spotify"],
-          result?["song_link"]
-        ];
+        Map<String, dynamic> infoSong = {
+          'album': result?['album'],
+          'title': result?['title'],
+          'artist': result?['artist'],
+          'release_date': result?['release_date'],
+          'image': result?['spotify']['album']['images'][1]['url'],
+          'apple': result?["apple_music"]["url"],
+          'spotify': result?["spotify"]["external_urls"]["spotify"],
+          'ext': result?["song_link"]
+        };
         return infoSong;
       }
     } catch (e) {
-      List<String> infoSong = ['null'];
+      Map<String, dynamic> infoSong = {};
       return infoSong;
     }
   }
