@@ -59,6 +59,8 @@ class SongBloc extends Bloc<SongEvent, SongState> {
     emit(SongVFavoritesState());
     if (list.length > 0) {
       emit(SongVFavoritesAreState(favorite: list));
+      dynamic cancion = list[0];
+      print(cancion['artist']);
     } else {
       emit(SongVFavoritesNullState());
     }
@@ -66,9 +68,28 @@ class SongBloc extends Bloc<SongEvent, SongState> {
 
   FutureOr<void> _requestFavorite(
       SongFavoriteRequestEvent event, Emitter<SongState> emit) async {
-    await getList();
-    // emit(SongFavoriteRequestState());
-    // if (event.songInfo != null) {
+    emit(SongFavoriteRequestState());
+    emit(SongSearchSuccessState(songInfo: event.songInfo));
+    getList();
+    if (event.songInfo != null) {
+      Map<String, dynamic> songInfo = event.songInfo;
+      print(songInfo);
+      if (list.length > 0) {
+        for (dynamic song in list) {
+          if (song['image'] == songInfo['image']) {
+            emit(SongFavoriteFailState());
+            emit(SongSearchSuccessState(songInfo: event.songInfo));
+            return;
+          }
+        }
+      }
+      list.add(songInfo);
+      await FirebaseFirestore.instance
+          .collection("favorites")
+          .doc(_auth.currentUser!.uid)
+          .update({'list_favorites': list});
+      emit(SongSearchSuccessState(songInfo: event.songInfo));
+    }
     //   List<String> currentSong = event.songInfo;
     //   try {} catch (e) {}
     //   Cancion k = new Cancion(
@@ -88,8 +109,6 @@ class SongBloc extends Bloc<SongEvent, SongState> {
     //   } else {
     //     emit(SongFavoriteFailState());
     //   }
-    // }
-    // emit(SongSearchSuccessState(songInfo: event.songInfo));
   }
 
   FutureOr<void> _goOut(
@@ -131,7 +150,6 @@ class SongBloc extends Bloc<SongEvent, SongState> {
         .doc(_auth.currentUser!.uid)
         .get();
     list = user_canciones.data()?['list_favorites'];
-    print(list);
   }
 }
 

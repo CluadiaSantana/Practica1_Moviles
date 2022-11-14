@@ -26,7 +26,6 @@ class httpReq {
         'return': 'apple_music,spotify'
       });
       final result = jsonDecode(response.body)['result'];
-      print(result);
       if (result == null) {
         Map<String, dynamic> infoSong = {};
         return infoSong;
