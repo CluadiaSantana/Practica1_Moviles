@@ -93,17 +93,23 @@ class ListenSong extends StatelessWidget {
       listener: (context, state) {
         // TODO: implement listener
         if (state is SongFavoriteRequestState) {
-          ScaffoldMessenger.of(context)
-              .showSnackBar(SnackBar(content: Text('Procesando...')));
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text('Procesando...'),
+            duration: Duration(seconds: 2),
+          ));
         }
 
         if (state is SongFavoriteSuccessState) {
-          ScaffoldMessenger.of(context)
-              .showSnackBar(SnackBar(content: Text('Agregado a favoritos...')));
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text('Agregado a favoritos...'),
+            duration: Duration(seconds: 2),
+          ));
         }
         if (state is SongFavoriteFailState) {
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-              content: Text('Este titulo ya se encuentra en favoritos')));
+            content: Text('Este titulo ya se encuentra en favoritos'),
+            duration: Duration(seconds: 2),
+          ));
         }
       },
       builder: (context, state) {

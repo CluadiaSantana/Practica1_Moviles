@@ -29,6 +29,16 @@ class Login extends StatelessWidget {
                 scale: 3,
               )),
           Positioned(
+              top: 50,
+              left: 10,
+              child: Text(
+                "Sing In",
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 35,
+                    fontWeight: FontWeight.bold),
+              )),
+          Positioned(
             left: 0,
             right: 0,
             top: 200,

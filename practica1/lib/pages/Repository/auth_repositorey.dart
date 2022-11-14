@@ -24,25 +24,11 @@ class AuthRepository {
     //Google sign in
     final googleUser = await _googleSignIn.signIn();
     final googleAuth = await googleUser!.authentication;
-
-    print(">> User email:${googleUser.email}");
-    print(">> User name:${googleUser.displayName}");
-    print(">> User photo:${googleUser.photoUrl}");
-
-    // credenciales de usuario autenticado con Google
     final AuthCredential credential = GoogleAuthProvider.credential(
       accessToken: googleAuth.accessToken,
       idToken: googleAuth.idToken,
     );
-    // firebase sign in con credenciales de Google
     final authResult = await _auth.signInWithCredential(credential);
-
-    // Extraer token**
-    // User user = authResult.user!;
-    // final firebaseToken = await user.getIdToken();
-    // print("user fcm token:${firebaseToken}");
-
-    // crear tabla user en firebase cloudFirestore y agregar valor fotoListId []
     await _createUserCollectionFirebase(_auth.currentUser!.uid);
   }
 
@@ -53,7 +39,6 @@ class AuthRepository {
         .get();
     // Si no exite el doc, lo crea con valor default lista vacia
     if (!userDoc.exists) {
-      print("user:" + user);
       await FirebaseFirestore.instance.collection("favorites").doc(user).set(
         {'list_favorites': []},
       );

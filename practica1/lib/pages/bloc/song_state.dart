@@ -32,8 +32,6 @@ class SongVFavoritesAreState extends SongState {
 
 class SongFavoriteSuccessState extends SongState {}
 
-class SongVFavoritesSuccessState extends SongState {}
-
 class SongFavoriteRequestState extends SongState {}
 
 class SongFavoriteDeleteRequestState extends SongState {}

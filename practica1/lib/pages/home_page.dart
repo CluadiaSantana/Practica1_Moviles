@@ -39,7 +39,39 @@ class HomePage extends StatelessWidget {
               ),
               MaterialButton(
                 onPressed: () {
-                  BlocProvider.of<AuthBloc>(context).add(SignOutEvent());
+                  showDialog(
+                      context: context,
+                      builder: (context) {
+                        return AlertDialog(
+                          title: Text('Cerrar sesión'),
+                          content: Text(
+                            'Al cerrar sesión de su ceuenta será redirigido a la pantalla de Log In \n ¿Quieres continuar?',
+                            style: TextStyle(fontSize: 12),
+                          ),
+                          actions: [
+                            TextButton(
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                              child: Text(
+                                'CANCEL',
+                                style: TextStyle(
+                                    color: Theme.of(context).primaryColor),
+                              ),
+                            ),
+                            TextButton(
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                                BlocProvider.of<AuthBloc>(context)
+                                    .add(SignOutEvent());
+                              },
+                              child: Text('Cerrar sesion',
+                                  style: TextStyle(
+                                      color: Theme.of(context).primaryColor)),
+                            ),
+                          ],
+                        );
+                      });
                 },
                 color: Colors.white,
                 child: Icon(

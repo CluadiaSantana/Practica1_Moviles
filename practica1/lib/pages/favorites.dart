@@ -25,8 +25,10 @@ class Favorites extends StatelessWidget {
   BlocConsumer<SongBloc, SongState> _listFavorite() {
     return BlocConsumer<SongBloc, SongState>(listener: (context, state) {
       if (state is SongFavoriteDeleteRequestState) {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text('Procesando...')));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text('Procesando...'),
+          duration: Duration(seconds: 2),
+        ));
       }
 
       if (state is SongFavoriteDelSuccRequestState) {

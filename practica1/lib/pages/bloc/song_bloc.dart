@@ -15,7 +15,6 @@ class SongBloc extends Bloc<SongEvent, SongState> {
   final ht = httpReq();
   final FirebaseAuth _auth = FirebaseAuth.instance;
   List<dynamic> list = [];
-  List<Cancion> favorC = [];
   SongBloc() : super(SongInitial()) {
     on<SongRecordEvent>(_onRecord);
     on<SongVFavoritesEvent>(_viewFavorite);
@@ -54,13 +53,12 @@ class SongBloc extends Bloc<SongEvent, SongState> {
   }
 
   FutureOr<void> _viewFavorite(
-      SongVFavoritesEvent event, Emitter<SongState> emit) {
-    getList();
+      SongVFavoritesEvent event, Emitter<SongState> emit) async {
+    List<dynamic> list = await getList();
     emit(SongVFavoritesState());
     if (list.length > 0) {
       emit(SongVFavoritesAreState(favorite: list));
       dynamic cancion = list[0];
-      print(cancion['artist']);
     } else {
       emit(SongVFavoritesNullState());
     }
@@ -70,13 +68,14 @@ class SongBloc extends Bloc<SongEvent, SongState> {
       SongFavoriteRequestEvent event, Emitter<SongState> emit) async {
     emit(SongFavoriteRequestState());
     emit(SongSearchSuccessState(songInfo: event.songInfo));
-    getList();
+    List<dynamic> list = await getList();
     if (event.songInfo != null) {
       Map<String, dynamic> songInfo = event.songInfo;
       print(songInfo);
       if (list.length > 0) {
         for (dynamic song in list) {
-          if (song['image'] == songInfo['image']) {
+          if (song['artist'] == songInfo['artist'] &&
+              song['title'] == songInfo['title']) {
             emit(SongFavoriteFailState());
             emit(SongSearchSuccessState(songInfo: event.songInfo));
             return;
@@ -88,27 +87,9 @@ class SongBloc extends Bloc<SongEvent, SongState> {
           .collection("favorites")
           .doc(_auth.currentUser!.uid)
           .update({'list_favorites': list});
+      emit(SongFavoriteSuccessState());
       emit(SongSearchSuccessState(songInfo: event.songInfo));
     }
-    //   List<String> currentSong = event.songInfo;
-    //   try {} catch (e) {}
-    //   Cancion k = new Cancion(
-    //       currentSong[0],
-    //       currentSong[1],
-    //       currentSong[2],
-    //       currentSong[3],
-    //       currentSong[4],
-    //       currentSong[5],
-    //       currentSong[6],
-    //       currentSong[7]);
-    //   int p = favorC.indexWhere((element) => element.image == currentSong[4]);
-    //   if (p < 0) {
-    //     favorC.add(k);
-    //     favorites.add(currentSong);
-    //     emit(SongFavoriteSuccessState());
-    //   } else {
-    //     emit(SongFavoriteFailState());
-    //   }
   }
 
   FutureOr<void> _goOut(
@@ -121,48 +102,31 @@ class SongBloc extends Bloc<SongEvent, SongState> {
   }
 
   FutureOr<void> _delete(
-      SongFavoriteDeleteRequestEvent event, Emitter<SongState> emit) {
-    // emit(SongFavoriteDeleteRequestState());
-    // Map<String, dynamic> currentSong = event.songInfo;
-    // Cancion k = new Cancion(
-    //     currentSong[0],
-    //     currentSong[1],
-    //     currentSong[2],
-    //     currentSong[3],
-    //     currentSong[4],
-    //     currentSong[5],
-    //     currentSong[6],
-    //     currentSong[7]);
-    // favorites.remove(event.songInfo);
-    // int p = favorC.indexWhere((element) => element.image == currentSong[4]);
-    // favorC.removeAt(p);
-    // emit(SongFavoriteDelSuccRequestState());
-    // if (favorites.length > 0) {
-    //   emit(SongVFavoritesAreState(favorite: favorites));
-    // } else {
-    //   emit(SongVFavoritesNullState());
-    // }
+      SongFavoriteDeleteRequestEvent event, Emitter<SongState> emit) async {
+    List<dynamic> list = await getList();
+    emit(SongFavoriteDeleteRequestState());
+    emit(SongVFavoritesAreState(favorite: list));
+    await Future.delayed(Duration(seconds: 2));
+    int index = event.songIndex;
+    list.removeAt(index);
+    await FirebaseFirestore.instance
+        .collection("favorites")
+        .doc(_auth.currentUser!.uid)
+        .update({'list_favorites': list});
+    emit(SongFavoriteDelSuccRequestState());
+    if (list.length > 0) {
+      emit(SongVFavoritesAreState(favorite: list));
+    } else {
+      emit(SongVFavoritesNullState());
+    }
   }
 
-  dynamic getList() async {
+  FutureOr<List<dynamic>> getList() async {
     var user_canciones = await FirebaseFirestore.instance
         .collection("favorites")
         .doc(_auth.currentUser!.uid)
         .get();
-    list = user_canciones.data()?['list_favorites'];
+    List<dynamic> lista = user_canciones.data()?['list_favorites'];
+    return lista;
   }
-}
-
-class Cancion {
-  String album;
-  String title;
-  String artist;
-  String date;
-  String image;
-  String apple;
-  String spotify;
-  String ext;
-
-  Cancion(this.album, this.title, this.artist, this.date, this.image,
-      this.apple, this.spotify, this.ext);
 }

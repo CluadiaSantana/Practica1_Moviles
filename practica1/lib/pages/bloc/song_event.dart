@@ -8,12 +8,6 @@ abstract class SongEvent extends Equatable {
 
 class SongRecordEvent extends SongEvent {}
 
-class SongErrorEvent extends SongEvent {}
-
-class SongSearchEvent extends SongEvent {}
-
-class SongSearchSuccessEvent extends SongEvent {}
-
 class SongVFavoritesEvent extends SongEvent {}
 
 class SongLauncherEvent extends SongEvent {
@@ -42,5 +36,3 @@ class SongFavoriteDeleteRequestEvent extends SongEvent {
   @override
   List<Object> get props => [songIndex];
 }
-
-class SongFavoriteDelSuccRequestEvent extends SongEvent {}
